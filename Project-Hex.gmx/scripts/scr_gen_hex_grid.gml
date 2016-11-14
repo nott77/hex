@@ -9,8 +9,8 @@ globalvar node_h; node_h = sprite_get_height(s_hex_2);
 globalvar map_offset_x; map_offset_x = 320;
 globalvar map_offset_y; map_offset_y = 220;
 
-map_w = 15;
-map_h = 10;
+map_w = 10;
+map_h = 7;
 
 xPos = 0;
 

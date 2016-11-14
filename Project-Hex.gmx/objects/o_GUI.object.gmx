@@ -25,7 +25,10 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (global.devmode == true) {
+            <string>draw_set_color(c_white);
+draw_text(x, y, "FPS - " + string(fps_real));
+    
+if (global.devmode == true) {
     draw_text(x, y+30, "mouse_w - " + string(global.mouse_world_x) + " , " + string(global.mouse_world_y));
     draw_text(x, y+60, "mouse_g - " + string(global.mouse_grid_x) + " , " + string(global.mouse_grid_y));
     

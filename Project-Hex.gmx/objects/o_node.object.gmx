@@ -132,19 +132,19 @@ switch (state) {
                 switch (temp_terrain.type) {
                     case "sand":
                         type = "sand";
-                        sprite_index = s_hex_sand;
+                        sprite_index = s_hex_2;
                         cost = 2;
                     break;
                     
                     case "rock":
                         type = "rock";
-                        sprite_index = s_hex_rock;
+                        sprite_index = s_hex_2;
                         accessible = false;
                     break;
                     
                     case "gap":
                         type = "gap";
-                        sprite_index = s_hex_gap;
+                        sprite_index = s_hex_2;
                         accessible = false;
                     break;
                 }
