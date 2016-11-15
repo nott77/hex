@@ -33,6 +33,46 @@ name = "player";
         </arguments>
       </action>
     </event>
+    <event eventtype="8" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>if (global.hover_node != noone and global.hover_node != map[grid_x, grid_y]) {
+    current = global.hover_node;
+    
+    // step through every node in the chain, parent to parent, until we reach the actor's node.
+    while(current.parent != noone){
+        draw_line_width_color(current.x, current.y, current.parent.x, current.parent.y, 4, c_red, c_red);
+        
+        current = current.parent; // End While Loop
+                
+    }
+}
+
+
+if global.selected_actor == id {
+    draw_sprite_ext(s_player,1,x,y,1,1,0,c_white,1)    
+} else {
+    draw_sprite_ext(s_player,0,x,y,1,1,0,c_white,1)  
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
   </events>
   <PhysicsObject>0</PhysicsObject>
   <PhysicsObjectSensor>0</PhysicsObjectSensor>

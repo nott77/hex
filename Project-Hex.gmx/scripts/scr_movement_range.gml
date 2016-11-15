@@ -28,7 +28,7 @@ ds_priority_add(open, start, start.g_score);
 
 // While opne queue is NOT empty...
 // repeat the following until ALL nodes have been looked at
-while (ds_priority_size(open) > 0) {
+while(ds_priority_size(open) > 0) {
     
     // remove node with the lowest G score from open
     current = ds_priority_delete_min(open);
@@ -59,12 +59,10 @@ while (ds_priority_size(open) > 0) {
                 // give neighbor appropriate parent
                 neighbor.parent = current;
                 
-                /*
-                // if node is diag create appropriate cost mod (Not sure if use for Hex's
+                // if node is diag create appropriate cost mod (Not sure if use for Hex's)
                 if (neighbor.grid_x != current.grid_x and neighbor.grid_y != current.grid_y) {
                     cost_mode = 1.5;
                 }
-                */
                 
                 // Calc G score of neighbor, with cost mod in place
                 neighbor.g_score = current.g_score + (neighbor.cost + cost_mod);
@@ -78,12 +76,11 @@ while (ds_priority_size(open) > 0) {
                 // Figure out if the neighbors score would be LOWER if found from the current node!
                 cost_mod = 1;
                 
-                /*
+                
                 // if node is diag create appropriate cost mod (Not sure if use for Hex's
                 if (neighbor.grid_x != current.grid_x and neighbor.grid_y != current.grid_y) {
                     cost_mode = 1.5;
                 }
-                */
                 
                 temp_g_score = current.g_score + (neighbor.cost * cost_mod);
                 
@@ -118,9 +115,11 @@ ds_priority_destroy(open);
 for (ii = 0; ii < ds_list_size(closed); ii +=1) {
     current = ds_list_find_value(closed, ii);
     current.move_node = true;
-    
     scr_color_move_node(current, argument1, argument2);
 }
+
+start.move_node = false;
+start.color = c_white;
 
 // Destroy Closed List!! IMPORTANT!
 ds_list_destroy(closed);

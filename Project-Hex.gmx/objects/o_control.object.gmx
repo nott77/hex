@@ -25,42 +25,46 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// Game INI
+            <string>///// Game INI
+randomize();
+//random_set_seed(123000130);
 
+// Turn Vars
+global.turn_order = ds_list_create();
+global.turn_counter = -1;
+global.turn_max = 0;
+global.round_counter = 0;
 
+///// Global Var INI
+global.devmode = false;
+global.hover_node = noone;
+global.selected_actor = noone;
+
+// Mouse Vars
+global.mouse_world_x = mouse_x;
+global.mouse_world_y = mouse_y;
+global.mouse_grid_x = 0;
+global.mouse_grid_y = 0;
+
+// Create Mouse 
+window_set_cursor(cr_none);
+instance_create(global.mouse_world_x, global.mouse_world_y, o_cursor);
 
 // Generate Hex grid
 scr_gen_hex_grid();
 
-// Generate Terrain
-scr_gen_terrain();
-
-///// Global Var INI
-global.devmode = false;
-
-// Mouse Vars
-global.mouse_world_x = 0;
-global.mouse_world_y = 0;
-global.mouse_grid_x = 0;
-global.mouse_grid_y = 0;
-
 /// Create Characters
 
 // Player
-
-
-// Gen Gaps
-rand_x = irandom_range(0, 9);
-rand_y = irandom_range(0, 6);
+rand_player_x = irandom_range(0, 9);
+rand_player_y = irandom_range(0, 6);
     
-
-
-    with (instance_create(map[rand_x,rand_y].world_x, map[rand_x,rand_y].world_y, o_player)) {
-        grid_x = o_control.rand_x;    
-        grid_y = o_control.rand_y;
-        name = "player";
-        map[grid_x,grid_y].occupant = id;
-    }
+with (instance_create(map[rand_player_x,rand_player_y].world_x, map[rand_player_x,rand_player_y].world_y, o_player)) {
+    grid_x = o_control.rand_player_x;    
+    grid_y = o_control.rand_player_y;
+    name = "player";
+    map[grid_x,grid_y].occupant = id;
+}
 
 
 /*

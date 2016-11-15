@@ -25,18 +25,44 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>draw_set_color(c_white);
-draw_text(x, y, "FPS - " + string(fps_real));
-    
+            <string>///// GUI
+
+
+///// DevMode
+
+// Vars
+var dev_menu_y = 30; // offset
+draw_set_color(c_white);
+
+// Draw Devmode
+draw_text(x, dev_menu_y, "FPS - " + string(fps_real)); dev_menu_y += 30;
+draw_text(x, dev_menu_y, "objects - " + string(instance_count)); dev_menu_y += 30;  
+
 if (global.devmode == true) {
-    draw_text(x, y+30, "mouse_w - " + string(global.mouse_world_x) + " , " + string(global.mouse_world_y));
-    draw_text(x, y+60, "mouse_g - " + string(global.mouse_grid_x) + " , " + string(global.mouse_grid_y));
-    
-    draw_text(x, y+120, "player_w - " + string(o_player.x) + " , " + string(o_player.y));
-    draw_text(x, y+150, "player_g - " + string(o_player.grid_x) + " , " + string(o_player.grid_y));
-    
-    draw_text(x, y+210, "objects - " + string(instance_count));   
+    dev_menu_y += 30;
+    draw_text(x, dev_menu_y, "mouse_w - " + string(global.mouse_world_x) + " , " + string(global.mouse_world_y)); dev_menu_y += 30;
+    draw_text(x, dev_menu_y, "mouse_g - " + string(global.mouse_grid_x) + " , " + string(global.mouse_grid_y)); dev_menu_y += 30;
+    dev_menu_y += 30;
+    draw_text(x, dev_menu_y, "hover_node_w - " + string(global.hover_node.x) + " , " + string(global.hover_node.y)); dev_menu_y += 30;
+    draw_text(x, dev_menu_y, "hover_node_g - " + string(global.hover_node.grid_x) + " , " + string(global.hover_node.grid_y)); dev_menu_y += 30;
+    if (global.hover_node.occupant != noone) {
+        draw_text(x, dev_menu_y, "hover_node_occupant - " + string(global.hover_node.occupant.name)); dev_menu_y += 30;
+    } else {
+        draw_text(x, dev_menu_y, "hover_node_occupant - " + "noone"); dev_menu_y += 30;
+    }
+    draw_text(x, dev_menu_y, "hover_node_access - " + string(global.hover_node.accessible)); dev_menu_y += 30;
+    draw_text(x, dev_menu_y, "cost - " + string(global.hover_node.cost)); dev_menu_y += 30;
+    dev_menu_y += 30;
+    draw_text(x, dev_menu_y, "player_w - " + string(o_player.x) + " , " + string(o_player.y)); dev_menu_y += 30;
+    draw_text(x, dev_menu_y, "player_g - " + string(o_player.grid_x) + " , " + string(o_player.grid_y)); dev_menu_y += 30;  
+    dev_menu_y += 30;
+    if (global.selected_actor != noone) {
+        draw_text(x, dev_menu_y, "selected_actor - " + string(global.selected_actor.name)); dev_menu_y += 30;
+    } else {
+        draw_text(x, dev_menu_y, "selected_actor - " + "noone"); dev_menu_y += 30;
+    }   
 }
+
 </string>
           </argument>
         </arguments>

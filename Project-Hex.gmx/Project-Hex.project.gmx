@@ -8,6 +8,7 @@
   <sprites name="sprites">
     <sprite>sprites\s_hex</sprite>
     <sprite>sprites\s_hex_2</sprite>
+    <sprite>sprites\s_selected_2</sprite>
     <sprite>sprites\s_hex_3</sprite>
     <sprite>sprites\s_hex_gap</sprite>
     <sprite>sprites\s_hex_4</sprite>
@@ -15,6 +16,7 @@
     <sprite>sprites\s_hex_rock</sprite>
     <sprite>sprites\s_hex_sand</sprite>
     <sprite>sprites\s_hex_dirt</sprite>
+    <sprite>sprites\s_cursor</sprite>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
@@ -30,6 +32,7 @@
       <object>objects\o_control</object>
       <object>objects\o_GUI</object>
       <object>objects\o_node</object>
+      <object>objects\o_cursor</object>
     </objects>
     <objects name="Actors">
       <object>objects\o_actor</object>

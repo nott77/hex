@@ -3,7 +3,7 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>-100</depth>
+  <depth>-1000</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -25,16 +25,27 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>// Grid Vars
+            <string>// States
+state = "idle";
+
+// Grid Vars
 grid_x = 0;
 grid_y = 0;
 
 // Stat Vars
-g_score = 0;
-
 name = "ERROR";
-move = 3;
-actions = 0;
+move = 2;
+actions = 2;
+
+init = 0;
+init_roll = 0;
+
+
+// Path Vars
+movement_path = path_add();
+path_set_kind(movement_path, 2);
+path_set_closed(movement_path, false);
+move_speed = 8;
 </string>
           </argument>
         </arguments>
@@ -59,6 +70,84 @@ actions = 0;
             <kind>1</kind>
             <string>world_x = x;
 world_y = y;
+
+switch(state) {
+    case "begin path":
+        path_start(movement_path, move_speed, 0, true); 
+        state = "moving";
+    break;
+    
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="7" enumb="8">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>// clear path
+path_clear_points(movement_path);
+state = "idle";
+
+if (actions &gt; 0) {
+    global.selected_actor = id;
+    scr_movement_range(map[grid_x, grid_y], move, actions);
+} else {
+    o_control.current_actor = noone;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>
+/*
+// if cursor is hovering over different node than actors
+if (global.hover_node != noone and global.hover_node != map[grid_x, grid_y]) {
+    current = global.hover_node;
+    
+    // step through every node in the chain, parent to parent, until we reach the actor's node.
+    while(current.parent != noone){
+        draw_line_width_color(current.x, current.y, current.parent.x, current.parent.y, 4, c_lime, c_lime);
+        
+        current = current.parent; // End While Loop
+                
+    }
+}
+*/
+draw_self();
 </string>
           </argument>
         </arguments>

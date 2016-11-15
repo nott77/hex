@@ -3,7 +3,7 @@
   <spriteName>s_hex_2</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>0</depth>
+  <depth>100</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -25,11 +25,10 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>// State
-state = "initializing";
-
-// Create DS List
+            <string>// Create DS List
 neighbors = ds_list_create();
+
+state = "initializing";
 
 // Color
 color = c_white;
@@ -41,12 +40,12 @@ world_x = x;
 world_y = y;
 
 // Vars
+hover = false;
 occupant = noone;
 accessible = true;
-type = "node"
-
+type = "node";
+current_actor = noone;
 // Pathfinding Vars -----------------
-
 parent = noone;
 g_score = 0;
 move_node = false;
@@ -76,87 +75,111 @@ cost = 1;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>
-o_player.actions = 2;
-scr_movement_range(map[o_player.grid_x,o_player.grid_y], o_player.move, o_player.actions); 
-
-
-if (accessible == true and occupant == noone) {
-    if (mouse_check_button_pressed(mb_left)){
-        if grid_x == global.mouse_grid_x and grid_y = global.mouse_grid_y {
-            
-            // Clear node
-            map[o_player.grid_x, o_player.grid_y].occupant = noone; 
-        
-            // Update Position
-            o_player.grid_x = grid_x;
-            o_player.grid_y = grid_y; 
-            o_player.x = x;
-            o_player.y = y;
-            
-            // Update actors new node
-            map[o_player.grid_x, o_player.grid_y].occupant = o_player.id; 
-            
-            // if selected actor perforemed double move deselect
-            
-            if (o_player.g_score &gt; o_player.move) {
-                scr_wipe_nodes();
-            } else {
-                o_player.actions -= 1;
-                
-                if (o_player.actions &gt; 0) {
-                    //re-preform movement range
-                    scr_movement_range(map[o_player.grid_x,o_player.grid_y], o_player.move, o_player.actions); 
-                } else {
-                    scr_wipe_nodes();
-                }                
-                
-            }
-                      
-            
-        } else {
-            scr_wipe_nodes();
-        }                
-    }    
-}
-
-///// Replace Nodes
-
-switch (state) {
+            <string>///// Replace Terrain
+switch(state) {
     case "initializing":
-        with (o_node) {
-            if (instance_position(x, y, o_terrain)) {
-                
-                temp_terrain = instance_position(x, y, o_terrain);
-                
-                switch (temp_terrain.type) {
+        with (o_node){
+            if (instance_position(x, y, o_terrain)) {               
+                temp_terrain = instance_position(x, y, o_terrain);         
+                switch(temp_terrain.type) {
                     case "sand":
                         type = "sand";
-                        sprite_index = s_hex_2;
+                        sprite_index = s_hex_sand;
+                        accessible = true;
                         cost = 2;
                     break;
                     
                     case "rock":
                         type = "rock";
-                        sprite_index = s_hex_2;
+                        sprite_index = s_hex_rock;
                         accessible = false;
-                    break;
-                    
-                    case "gap":
-                        type = "gap";
-                        sprite_index = s_hex_2;
-                        accessible = false;
-                    break;
-                }
-                
-                with (temp_terrain) {
+                    break;        
+                }              
+                with(temp_terrain) {
                     instance_destroy();
                 }  
             }
+            
+            if (instance_position(x, y, o_actor)){
+                occupant = instance_position(x, y, o_actor);
+                occupant.grid_x = grid_x;
+                occupant.grid_y = grid_y;
+            }
+            
         }
-    state = "ready";
+    state = "roll init";
+    break;
+    
+    case "roll init":
+        temp_init = ds_priority_create();
+        
+        with(o_actor) {
+            init_roll = irandom_range(1,20) + init;
+            
+            ds_priority_add(other.temp_init, id, init_roll);
+        }
+    
+        while(ds_priority_size(temp_init) &gt; 0) {
+            ds_list_add(global.turn_order, ds_priority_delete_max(temp_init));
+        }
+    
+        global.turn_max = ds_list_size(global.turn_order);
+        
+        // destroy list
+        ds_priority_destroy(temp_init);
+        
+        state = "ready"             
+    break;
+    
+    case "ready":
+        if (current_actor == noone) {
+            // Turn counters
+            global.turn_counter += 1;
+            if (global.turn_counter &gt;= global.turn_max) {
+                global.turn_counter = 0
+                global.round_counter += 1;
+            } 
+            
+            current_actor = ds_list_find_value(global.turn_order, global.turn_counter);
+            
+            current_actor.actions = 2;
+            global.selected_actor = current_actor;
+            
+            scr_movement_range(map[current_actor.grid_x, current_actor.grid_y], current_actor.move, current_actor.actions);           
+        }
     break;
 }
+
+
+
+
+
+
+
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="11">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>hover = false;
 </string>
           </argument>
         </arguments>
@@ -179,9 +202,11 @@ switch (state) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>// Mouse Check
+            <string>/// Mouse Check / Hover Node
 global.mouse_grid_x = grid_x;
 global.mouse_grid_y = grid_y;
+global.hover_node = map[grid_x, grid_y];
+hover = true;
 </string>
           </argument>
         </arguments>
@@ -209,7 +234,7 @@ global.mouse_grid_y = grid_y;
 if global.devmode == true {
     draw_set_halign(fa_center);
     draw_set_valign(fa_middle);
-    draw_set_color(c_white);
+    draw_set_color(c_black);
     
     // Grid x,y position
     draw_text(x, y-35, string(grid_x) + " , " + string(grid_y));
@@ -284,7 +309,13 @@ if global.devmode == true {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>draw_sprite_ext(sprite_index, -1, x, y, 1, 1, 0, color, 1);
+            <string>// Draw self and Hover.
+if (hover == true) {
+    draw_sprite_ext(sprite_index, -1, x, y, 1, 1, 0, color, 1);
+    draw_sprite_ext(s_selected_2, -1, x, y, 1, 1, 0, c_white, 1);
+} else {
+    draw_sprite_ext(sprite_index, -1, x, y, 1, 1, 0, color, 1);
+}
 </string>
           </argument>
         </arguments>
